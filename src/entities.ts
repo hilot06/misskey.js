@@ -270,7 +270,8 @@ export type LiteInstanceMetadata = {
 	maintainerName: string | null;
 	maintainerEmail: string | null;
 	version: string;
-	name: string | null;
+	name: string;
+	shortName: string | null;
 	uri: string;
 	description: string | null;
 	langs: string[];
@@ -278,10 +279,6 @@ export type LiteInstanceMetadata = {
 	repositoryUrl: string;
 	feedbackUrl: string;
 	disableRegistration: boolean;
-	disableLocalTimeline: boolean;
-	disableGlobalTimeline: boolean;
-	driveCapacityPerLocalUserMb: number;
-	driveCapacityPerRemoteUserMb: number;
 	emailRequiredForSignup: boolean;
 	enableHcaptcha: boolean;
 	hcaptchaSiteKey: string | null;
@@ -291,32 +288,30 @@ export type LiteInstanceMetadata = {
 	turnstileSiteKey: string | null;
 	swPublickey: string | null;
 	themeColor: string | null;
-	mascotImageUrl: string | null;
+	mascotImageUrl: string;
 	bannerUrl: string | null;
-	errorImageUrl: string | null;
+	infoImageUrl: string | null;
+	serverErrorImageUrl: string | null;
+	notFoundImageUrl: string | null;
 	iconUrl: string | null;
 	backgroundImageUrl: string | null;
 	logoImageUrl: string | null;
 	maxNoteTextLength: number;
-	enableEmail: boolean;
-	enableTwitterIntegration: boolean;
-	enableGithubIntegration: boolean;
-	enableDiscordIntegration: boolean;
-	enableServiceWorker: boolean;
-	emojis: CustomEmoji[];
-	defaultDarkTheme: string | null;
 	defaultLightTheme: string | null;
-	ads: {
-		id: ID;
-		ratio: number;
-		place: string;
-		url: string;
-		imageUrl: string;
-	}[];
+	defaultDarkTheme: string | null;
+	ads: Ad[];
+	enableEmail: boolean;
+	enableServiceWorker: boolean;
 	translatorAvailable: boolean;
+	serverRules: string[];
+	policies: Record<string, any>;
+	mediaProxy: string;
 };
 
 export type DetailedInstanceMetadata = LiteInstanceMetadata & {
+	cacheRemoteFiles: boolean;
+	cacheRemoteSensitiveFiles: boolean;
+	requireSetup: boolean;
 	pinnedPages: string[];
 	pinnedClipId: string | null;
 	cacheRemoteFiles: boolean;
@@ -329,6 +324,9 @@ export type InstanceMetadata = LiteInstanceMetadata | DetailedInstanceMetadata;
 
 export type ServerInfo = {
 	machine: string;
+	os: string;
+	node: string;
+	psql: string;
 	cpu: {
 		model: string;
 		cores: number;
@@ -339,6 +337,9 @@ export type ServerInfo = {
 	fs: {
 		total: number;
 		used: number;
+	};
+	net: {
+		interface: string;
 	};
 };
 
@@ -417,7 +418,14 @@ export type AuthSession = {
 	token: string;
 };
 
-export type Ad = TODO;
+export type Ad = {
+	id: ID,
+	url: string;
+	place: string;
+	ratio: number;
+	imageUrl: string;
+	dayOfWeek: number;
+};
 
 export type Clip = TODO;
 

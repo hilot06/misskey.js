@@ -13,27 +13,24 @@ type ShowUserReq = { username: string; host?: string; } | { userId: User['id']; 
 
 export type Endpoints = {
 	// admin
-	'admin/abuse-user-reports': { req: TODO; res: TODO; };
+	'admin/abuse-user-reports': { req: { limit?: number; sinceId?: TODO; untilId?: TODO; state?: string | null; reporterOrigin?: OriginType; targetUserOrigin?: OriginType; forwarded: boolean; }; res: { id: ID; createdAt: DateString; comment: string; resolved: boolean; reporterId: User['id']; targetUserId: User['id']; assigneeId: User['id']; reporter: User[]; targetUser: User[]; assignee?: User[]; }; };
+	'admin/delete-account': { req: { userId: User['id']; }; res: null; }
 	'admin/delete-all-files-of-a-user': { req: { userId: User['id']; }; res: null; };
-	'admin/delete-logs': { req: NoParams; res: null; };
-	'admin/get-index-stats': { req: TODO; res: TODO; };
-	'admin/get-table-stats': { req: TODO; res: TODO; };
-	'admin/invite': { req: TODO; res: TODO; };
-	'admin/logs': { req: TODO; res: TODO; };
-	'admin/reset-password': { req: TODO; res: TODO; };
-	'admin/resolve-abuse-user-report': { req: TODO; res: TODO; };
-	'admin/resync-chart': { req: TODO; res: TODO; };
-	'admin/send-email': { req: TODO; res: TODO; };
-	'admin/server-info': { req: TODO; res: TODO; };
-	'admin/show-moderation-logs': { req: TODO; res: TODO; };
-	'admin/show-user': { req: TODO; res: TODO; };
-	'admin/show-users': { req: TODO; res: TODO; };
-	'admin/silence-user': { req: TODO; res: TODO; };
-	'admin/suspend-user': { req: TODO; res: TODO; };
-	'admin/unsilence-user': { req: TODO; res: TODO; };
-	'admin/unsuspend-user': { req: TODO; res: TODO; };
-	'admin/update-meta': { req: TODO; res: TODO; };
-	'admin/vacuum': { req: TODO; res: TODO; };
+	'admin/get-index-stats': { req: NoParams; res: TODO; };
+	'admin/get-table-stats': { req: NoParams; res: TODO; };
+	'admin/get-user-ips': { req: { userId: User['id']; }; res: { ip: string; createdAt: DateString; }[]; }
+	'admin/meta': { req: NoParams; res: TODO; } // TODO: metaとadmin/metaで取る内容が違うので、型も分けるべき？
+	'admin/reset-password': { req: { userId: User['id']; }; res: { password: string; }; };
+	'admin/resolve-abuse-user-report': { req: { reportId: TODO; forward?: boolean; }; res: null; };
+	'admin/send-email': { req: { to: string; subject: string; text: string; }; res: null; };
+	'admin/server-info': { req: NoParams; res: ServerInfo; };
+	'admin/show-moderation-logs': { req: { limit?: number; sinceId?: TODO; untilId?: TODO; type?: string | null; userId?: User['id'] | null; }; res: { id: TODO; createdAt: DateString; type: string; info: object; userId: User['id']; user: UserDetailed; }[]; };
+	'admin/show-user': { req: { userId: User['id'] }; res: { email: string; emailVerified: boolean; autoAcceptFollowed: boolean; noCrawle: boolean; preventAiLearning: boolean; alwaysMarkNsfw: boolean; autoSensitive: boolean; carefulBot: boolean; injectFeatureNote: boolean; receiveAnnouncementEmail: boolean; mutedWords: string[]; mutedInstances: string[]; notificationRecieveConfig: TODO; isModerator: boolean; isSilenced: boolean; isSuspended: boolean; lastActiveDate: DateString; moderationNote: string; policies: TODO; roles: TODO; roleAssigns: { createdAt: DateString; expiresAt: DateString | null; roleId: TODO } }; }; // FIXME: resは想像で書いてしまったので実装見て修正
+	'admin/show-users': { req: { limit?: number; offset?: number; sort?: UserSorting; state?: 'all' | 'alive' | 'available' | 'admin' | 'moderator' | 'adminOrModerator' | 'suspended'; origin?: OriginType; username?: User['username']; hostname?: string | null; }; res: UserDetailed[]; };
+	'admin/suspend-user': { req: { userId: User['id'] }; res: null; };
+	'admin/unsuspend-user': { req: { userId: User['id']; }; res: null; };
+	'admin/update-meta': { req: TODO; res: null; }; // TODO: admin/meta参照。smtp、objectStorage等追加されている。
+	'admin/update-user-note': { req: { userId: User['id']; text: string; }; res: null; };
 	'admin/accounts/create': { req: TODO; res: TODO; };
 	'admin/ad/create': { req: TODO; res: TODO; };
 	'admin/ad/delete': { req: { id: Ad['id']; }; res: null; };
